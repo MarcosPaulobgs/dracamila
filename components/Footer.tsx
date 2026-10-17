@@ -1,5 +1,5 @@
 import { IconPin as Pin, IconRelogio as Relogio, IconEmail as Email, IconInstagram as Insta, IconWhatsApp as Zap } from "@/components/Icones";
-import { CRO, ENDERECO, HORARIOS, WHATSAPP_EXIBICAO, EMAIL, INSTAGRAM, waLink } from "@/lib/config";
+import { CRO, ENDERECO, HORARIOS, WHATSAPP_EXIBICAO, EMAIL, INSTAGRAM, MAPA_LINK, waLink } from "@/lib/config";
 
 const links = [["Sobre", "#sobre"], ["Serviços", "#servicos"], ["Resultados", "#resultados"], ["Contato", "#contato"]];
 const lk = "transition-colors hover:text-white";
@@ -32,7 +32,7 @@ export default function Footer() {
         <div>
           <h3 className="mb-4 text-sm text-white">Contato</h3>
           <ul className="space-y-3 text-sm">
-            <li className="flex gap-3"><span className={`mt-0.5 ${dourado}`}><Pin /></span><span>{ENDERECO}</span></li>
+            <li className="flex gap-3"><span className={`mt-0.5 ${dourado}`}><Pin /></span><a href={MAPA_LINK} target="_blank" rel="noopener noreferrer" className={lk}>{ENDERECO}</a></li>
             <li className="flex gap-3"><span className={`mt-0.5 ${dourado}`}><Zap /></span>
               <a href={waLink()} target="_blank" rel="noopener noreferrer" className={lk}>{WHATSAPP_EXIBICAO}</a></li>
             <li className="flex gap-3"><span className={`mt-0.5 ${dourado}`}><Email /></span>

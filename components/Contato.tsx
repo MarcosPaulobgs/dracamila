@@ -1,8 +1,8 @@
-import { ENDERECO, HORARIOS, WHATSAPP_EXIBICAO, EMAIL, INSTAGRAM, MAPA, waLink } from "@/lib/config";
+import { ENDERECO, HORARIOS, WHATSAPP_EXIBICAO, EMAIL, INSTAGRAM, MAPA, MAPA_LINK, waLink } from "@/lib/config";
 
 const lk = "border-b border-taupe hover:text-taupe";
 const dados = [
-  { rotulo: "Endereço", valor: <>{ENDERECO}</> },
+  { rotulo: "Endereço", valor: <a href={MAPA_LINK} target="_blank" rel="noopener noreferrer" className={lk}>{ENDERECO}</a> },
   { rotulo: "Horários", valor: <>{HORARIOS}</> },
   { rotulo: "WhatsApp", valor: <a href={waLink()} target="_blank" rel="noopener noreferrer" className={lk}>{WHATSAPP_EXIBICAO}</a> },
   { rotulo: "E-mail", valor: <a href={`mailto:${EMAIL}`} className={lk}>{EMAIL}</a> },
