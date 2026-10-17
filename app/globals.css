@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; scroll-padding-top: 65px; /* altura do header (h-16 + borda): a seção encosta logo abaixo dele */ }
+/* Lenis (rolagem suave): ele assume o controle, então o smooth nativo sai de cena */
+html.lenis, html.lenis body { height: auto; }
+html.lenis { scroll-behavior: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+body { @apply bg-base text-grafite font-sans antialiased; overflow-x: clip; }
+:focus-visible { outline: 2px solid #9a7b5a; outline-offset: 3px; }
+
+/* Único movimento da página: o arco da foto se revela ao carregar */
+@keyframes arco { from { clip-path: inset(100% 0 0 0 round 9999px 9999px 0 0); } to { clip-path: inset(0 0 0 0 round 9999px 9999px 1.5rem 1.5rem); } }
+.arco { animation: arco 1.1s cubic-bezier(.2,.7,.2,1) both; }
+@media (prefers-reduced-motion: reduce) { .arco { animation: none; } .hero-video { display: none; } html { scroll-behavior: auto; } }
+
+/* ===== Animações ===== */
+:root { --inicio: 1.5s; } /* quando o hero começa; sem a abertura (Preloader), use 0.2s */
+
+/* Abertura */
+@keyframes cortina { to { transform: translateY(-100%); visibility: hidden; } }
+@keyframes pre-in { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
+@keyframes traco { to { stroke-dashoffset: 0; } }
+.pre { animation: cortina .9s cubic-bezier(.7,0,.2,1) 1.05s forwards; }
+.pre-logo { animation: pre-in .8s cubic-bezier(.2,.7,.2,1) .1s both; }
+.pre-sorriso { stroke-dasharray: 240; stroke-dashoffset: 240; animation: traco .9s ease .45s forwards; }
+
+/* Entrada do topo e do hero */
+@keyframes subir { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes titulo { from { opacity: 0; transform: translateY(34px); filter: blur(10px); } to { opacity: 1; transform: none; filter: blur(0); } }
+@keyframes descer { from { opacity: 0; transform: translateY(-100%); } to { opacity: 1; transform: none; } }
+@keyframes zoom { from { transform: scale(1.1); } to { transform: scale(1); } }
+@keyframes aparece { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+header { animation: descer .9s cubic-bezier(.2,.7,.2,1) var(--inicio) both; }
+main > section:first-child > div:last-child > * { animation: subir 1s cubic-bezier(.2,.7,.2,1) both; }
+main > section:first-child > div:last-child > :nth-child(1) { animation-delay: var(--inicio); }
+main > section:first-child > div:last-child > :nth-child(2) { animation: titulo 1.2s cubic-bezier(.2,.7,.2,1) calc(var(--inicio) + .15s) both; }
+main > section:first-child > div:last-child > :nth-child(3) { animation-delay: calc(var(--inicio) + .4s); }
+main > section:first-child > div:last-child > :nth-child(4) { animation-delay: calc(var(--inicio) + .55s); }
+main > section:first-child > div:last-child > :nth-child(5) { animation-delay: calc(var(--inicio) + .7s); }
+main > section:first-child > div:first-child > div:first-child { animation: zoom 16s ease-out both; }
+.hero-video { animation: aparece 1.8s ease calc(var(--inicio) - .3s) both; }
+a[aria-label="Agendar pelo WhatsApp"] { animation: pop .6s cubic-bezier(.2,.7,.2,1) calc(var(--inicio) + 1.3s) both; }
+
+/* Entrada ao rolar (classes aplicadas pelo ScrollFX) */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+.reveal.is-in { opacity: 1; transform: none; }
+.reveal-img { clip-path: inset(100% 0 0 0 round 1.5rem); transition: clip-path 1.2s cubic-bezier(.2,.7,.2,1); }
+.reveal-img.is-in { clip-path: inset(0 0 0 0 round 1.5rem); }
+.reveal-img > * { transform: scale(1.14); transition: transform 1.6s cubic-bezier(.2,.7,.2,1); }
+.reveal-img.is-in > * { transform: scale(1); }
+section h2::after { content: ""; display: block; width: 4rem; height: 1px; margin-top: 1.5rem; background: #9a7b5a; }
+section h2.reveal::after { transform: scaleX(0); transform-origin: left; transition: transform 1.1s cubic-bezier(.2,.7,.2,1) .45s; }
+section h2.reveal.is-in::after { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pre { display: none; }
+  header, a[aria-label="Agendar pelo WhatsApp"], main > section:first-child * { animation: none !important; }
+}
+
+/* Celular (toque): animações mais leves para a rolagem nativa não engasgar */
+@media (pointer: coarse) {
+  main > section:first-child > div:first-child > div:first-child { animation: none; } /* sem zoom contínuo da foto */
+  .reveal-img, .reveal-img.is-in { clip-path: none; }
+  .reveal-img { opacity: 0; transition: opacity .9s ease; }
+  .reveal-img.is-in { opacity: 1; }
+  .reveal-img > *, .reveal-img.is-in > * { transform: none; transition: none; }
+}
+
+/* Celular: efeitos mais leves para a rolagem nativa não perder quadros (sem recorte animado nas fotos) */
+@media (max-width: 767px) {
+  .reveal-img { clip-path: none; opacity: 0; transition: opacity .8s ease; }
+  .reveal-img.is-in { opacity: 1; clip-path: none; }
+  .reveal-img > *, .reveal-img.is-in > * { transform: none; transition: none; }
+}
