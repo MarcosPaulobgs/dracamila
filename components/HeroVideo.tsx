@@ -10,6 +10,6 @@ export default function HeroVideo({ src }: { src: string }) {
   }, []);
   return (
     <video ref={ref} src={src} autoPlay muted loop playsInline preload="auto" aria-hidden="true"
-           className="hero-video absolute -inset-3 h-[calc(100%+1.5rem)] w-[calc(100%+1.5rem)] max-w-none object-cover md:blur-[2px]" />
+           className="hero-video absolute -inset-3 h-[calc(100%+1.5rem)] w-[calc(100%+1.5rem)] max-w-none object-cover blur-[2px] transform-gpu" />
   );
 }
